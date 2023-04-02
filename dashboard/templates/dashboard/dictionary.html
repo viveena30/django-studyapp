@@ -1,0 +1,52 @@
+{% extends 'dashboard/base.html' %} 
+{% load static %} 
+{% load tags %}
+{% block content %}
+<section class='text-center container'>
+    <h2>Student Dictionary</h2>
+    <p>Enter any word to get the phonetics, definition and an example for the word</p>
+    <form action="" method="post">
+    {% csrf_token %}
+     {% for field in form %}
+    <div class="col-lg-12 mt-3">
+      <label class="form-label text-gray-900 mb-0">{{ field.label_tag }}</label>
+      {{field | add_class:"form-control"}} {{ field.errors }} 
+      {% if field.help_text %}
+      <p class="help small">{{ field.help_text|safe }}</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+        <input class="btn btn-danger" type="submit" value="Submit">
+    </form><br>
+    <div class="content-section p-0 mt-5">
+{% if input %}
+        <div class="custom-header">
+            <h2>{{input}}</h2>
+            <h6>{{phonetics}}</h6>
+            <audio id="player" src="{{audio}}"></audio>
+            <div>
+                <a onclick="document.getElementById('player').play()">
+                <i class='fa fa-volume-up fa-2x'></i>
+                </a>
+            </div>
+        </div>
+
+        <hr class="p-0 m-0">
+
+        <p class="float-left">
+            <h4>Definition: {{definition}}</h4>
+            <h4>Example: {{example}}</h4>
+        </p>
+        Synonyms:
+        {{synonyms}}
+        {% comment %} {% for synonym in synonyms %}
+            {{synonym}}
+        {% endfor %} {% endcomment %}
+        <hr>
+
+    </div>
+    {% else %}
+    <h2>enter a word</h2>
+    {% endif %}
+</section>
+{% endblock content %}

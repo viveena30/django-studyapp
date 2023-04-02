@@ -1,0 +1,72 @@
+{% extends 'dashboard/base.html' %} 
+{% load tags %} 
+{% load static %} 
+{% block content %}
+
+<section class='text-center container'>
+    <h2>Search books and browse your favorite</h2>
+    <p>just enter the search query to obtain the results</p><b></b>
+    <form action="{% url 'books' %}" method="post">
+    {% csrf_token %}
+         {% for field in form %}
+    <div class="col-lg-12 mt-3">
+      <label class="form-label text-gray-900 mb-0">{{ field.label_tag }}</label>
+      {{field | add_class:"form-control"}} {{ field.errors }} 
+      {% if field.help_text %}
+      <p class="help small">{{ field.help_text|safe }}</p>
+      {% endif %}
+    </div>
+    {% endfor %} {% comment %} {{form}} {% endcomment %}
+        <input class="btn btn-danger" type="submit" value="Submit">
+    </form><br>
+
+{% for result in results %}
+    <a href="{{result.preview}}" target="_blank">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-3">
+                        <img class="img-fluid" src="{{result.thumbnail.thumbnail}}" alt="">
+
+                    </div>
+                    <div class="col-md-9">
+                    <h3 class="p-0 m-0">{{result.title}}</h3>
+                        {% if result.subtitle %}
+                        <b>
+                            <u>
+
+                                <h5 class="p-0 m-0">{{result.subtitle}}</h5>
+                            </u>
+                        </b>
+                        {% endif %}
+                        {% if result.description %}
+                        <h6 class="p-0 m-1">{{result.description}}</h6>
+                        {% endif %}
+                        <b> 
+                        {% if result.categories %}
+                            <h6 class="ml-0 mt-3">
+                                Category : 
+                                {% for category in result.categories %}
+                                    {{category}}
+                                {% endfor %}
+                            </h6>
+                        {% endif %}
+                        {% if result.count %}
+
+                            <h6 class="ml-0 mt-1">Pages: {{result.count}}</h6>
+                        {% endif %}
+                        {% if result.rating %}
+                        
+                            <h6 class="ml-0 mt-1">{{result.rating}}: 4</h6>
+                        {% endif %}
+                        </b>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </a>
+{% endfor %}
+    <br>
+</section>
+
+{% endblock content %}
