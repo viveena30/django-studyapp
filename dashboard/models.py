@@ -10,7 +10,7 @@ class Notes(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return self.title
+        return self.title + '-' + str(self.user.username)
     
     class Meta:
         verbose_name = 'Notes'
